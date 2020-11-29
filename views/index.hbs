@@ -1,0 +1,204 @@
+<nav class="navbar navbar-light bg-info row">
+    <div class="col-md-8">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="/img/image3.jpg" width="100" height="100" class="d-inline-block align-top rounded " alt="icon">
+            <h4 class="card-title text-danger col-md-4">My Grocery list</h4>
+        </a>
+    </div>
+    <div class="float-right text-lg" id="dateId"></div>
+</nav>
+<div class="page-content page-container" id="page-content">
+    <div class="card bg-info text-center tect-light rounded-0 mt-2">
+        <h1 class="display-4">
+            <i class="fas fa-clipboard-list mr-3"></i>
+            <span class="text-dark mr-3">Grocery</span>List
+        </h1>
+    </div>
+    {{#if msg}}
+    <div class="alert alert-info">{{msg}}</div>
+    {{/if}}
+
+    <div>
+        <div class=" page-container justify-content-center">
+            <div class="page-container">
+                <div class="card px-3 page-container">
+                    <div class="card-body ">
+                        <div class="row">
+                            <h6 class="col-md-6"><u class="text-primary">Add Item to the grocery list</u></h6>
+                            <h6 class="col-md-2"><u class="text-primary">Item's Priority</u></h6>
+                            <h6 class="col-md-3"><u class="text-primary">Action</u></h6>
+                        </div>
+                        <form action="list/addNewItem" class="add-items row  mt-2" method="POST">
+                            <input type="text"
+                                class="form-control todo-list-input border border-success rounded col-md-6 mr-3"
+                                style="height: 50px;" placeholder="What do you need to buy today?" name="title"
+                                required />
+
+                            <select name="priority" id="priority" class="col-md-2 text-secondary bg-info text-dark"
+                                value="1">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <button
+                                class="add btn btn-primary font-weight-bold todo-list-add-btn col-md-2">Add+</button>
+                        </form>
+                        <hr>
+                        {{#each itemsNotCompleted}}
+                        <div class="list-wrapper">
+                            <ul class="todo-list">
+                                <li class="row justify-content-around text-lg">
+                                    <div class="form-check col-md-8" style="width: 1f;"> <label
+                                            class="form-check-label">
+                                            <input class="checkbox itemClass float-left text-bold" type="checkbox"
+                                                onclick="getUpdate('{{_id}}')"> {{priority}} )
+                                            {{title}}<i class="input-helper"></i></label>
+                                    </div>
+                                    <div class="form-check col-md-4">
+                                        <a type="button" data-toggle="modal" data-target="#deleteItem{{_id}}">
+                                            <i class="far fa-trash-alt text-danger  p-1 text-lg" title="delete"></i>
+                                        </a>
+                                        <a type="button" data-toggle="modal" data-target="#updateItem{{_id}}">
+                                            <i class="far fa-edit text-info  p-1 text-lg" title="Edit"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        {{!-- Modal Delete Item --}}
+                        <div class="modal" tabindex="-1" role="dialog" id="deleteItem{{_id}}">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-info">{{title}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-center text-danger">Are you sure you want to delete {{title}}!?
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <a href="/list/deleteItem/{{_id}}" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{!-- End Modal Delete Item --}}
+                        {{!-- Modal Update Item --}}
+                        <div class="modal" tabindex="-1" role="dialog" id="updateItem{{_id}}">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-info">{{title}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-center text-danger">Do you want to update your item</p>
+                                        <h4 class="card-title text-dark">My Grocery list</h4>
+                                        <form action="/list/updateItem/{{_id}}" class="add-items d-flex mt-2"
+                                            method="POST">
+                                            <input type="text" placeholder="{{title}}" name="title"
+                                                class="form-control todo-list-input border border-success rounded"
+                                                placeholder="What do you need to buy today?" required>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{!-- End Modal update Item --}}
+                        {{/each}}
+                        {{#each itemsAreCompleted}}
+                        <li class="row justify-content-around text-lg">
+                            <div class="form-check col-md-8" style="width: 1f;">
+                                <label class="form-check-label">
+                                    <input class="checkbox itemClass float-left text-bold text-success" type="checkbox"
+                                        onclick="getUpdate('{{_id}}')" style="text-decoration: line-through;">
+                                    <i class="input-helper">
+                                        <u class="text-success">Completed</u>
+                                        <del class="text-danger">{{title}}</del>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="form-check col-md-4">
+                                <a type="button" data-toggle="modal" data-target="#deleteItem2{{_id}}">
+                                    <i class="far fa-trash-alt text-danger  p-1 text-lg" title="delete"></i>
+                                </a>
+                                <a type="button" data-toggle="modal" data-target="#updateItem2{{_id}}">
+                                    <i class="far fa-edit text-info  p-1 text-lg" title="Edit"></i>
+                                </a>
+                            </div>
+                        </li>
+                        {{!-- Modal Delete Item --}}
+                        <div class="modal" tabindex="-1" role="dialog" id="deleteItem2{{_id}}">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-info">{{title}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-center text-danger">Are you sure you want to delete {{title}}!?
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <a href="/list/deleteItem/{{_id}}" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{!-- End Modal Delete Item --}}
+                        {{!-- Modal Update Item --}}
+                        <div class="modal" tabindex="-1" role="dialog" id="updateItem2{{_id}}">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-info">{{title}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-center text-danger">Do you want to update your item</p>
+                                        <h4 class="card-title text-dark">My Grocery list</h4>
+                                        <form action="/list/updateItem/{{_id}}" class="add-items d-flex mt-2"
+                                            method="POST">
+                                            <input type="text" placeholder="{{title}}" name="title"
+                                                class="form-control todo-list-input border border-success rounded"
+                                                placeholder="What do you need to buy today?" required>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{!-- End Modal update Item --}}
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
