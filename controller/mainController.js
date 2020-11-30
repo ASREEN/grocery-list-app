@@ -52,16 +52,34 @@ exports.addItem = (req, res) => {
 exports.updateItem = (req, res) => {
     let id = req.params.id;
     console.log(req.body)
-    Item.findByIdAndUpdate(id, req.body, (err, data) => {
+    // check the priorty
+    let match = false;
+    Item.find((err, allDoc) => {
         if (err) throw err;
-        // console.log(data)
-        data.save((err, doc) => {
-            if (err) throw err;
-            req.flash('msg', 'One item has been updated')
-            res.redirect('/')
+        const priorityReq = req.body.priority;
+        allDoc.map(doc => {
+            if (doc.priority == priorityReq) {
+                match = true;
+            }
         })
+        console.log({ match })
+        if (match == true) {
+            req.flash('msg', 'You have already an item in this position, please change the number')
+            res.redirect('/')
+        }
+        Item.findByIdAndUpdate(id, req.body, (err, data) => {
+            if (err) throw err;
+            // console.log(data)
+            data.save((err, doc) => {
+                if (err) throw err;
+                req.flash('msg', 'One item has been updated')
+                res.redirect('/')
+            })
 
+        })
     })
+
+
 }
 // remove an Item
 exports.removeItem = (req, res) => {
