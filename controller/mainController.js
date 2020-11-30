@@ -63,23 +63,24 @@ exports.updateItem = (req, res) => {
             }
         })
         console.log({ match })
-        if (match == true) {
+        if (match == false) {
+            Item.findByIdAndUpdate(id, req.body, (err, data) => {
+                if (err) throw err;
+                // console.log(data)
+                data.save((err, doc) => {
+                    if (err) throw err;
+                    req.flash('msg', 'One item has been updated')
+                    res.redirect('/')
+                })
+
+            })
+        }
+        else {
             req.flash('msg', 'You have already an item in this position, please change the number')
             res.redirect('/')
         }
-        Item.findByIdAndUpdate(id, req.body, (err, data) => {
-            if (err) throw err;
-            // console.log(data)
-            data.save((err, doc) => {
-                if (err) throw err;
-                req.flash('msg', 'One item has been updated')
-                res.redirect('/')
-            })
 
-        })
     })
-
-
 }
 // remove an Item
 exports.removeItem = (req, res) => {
