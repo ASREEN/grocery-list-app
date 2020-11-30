@@ -1,0 +1,26 @@
+{
+  "name": "it-active-task",
+  "version": "1.0.0",
+  "description": "Grocery List App ",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "keywords": [
+    "Grocery",
+    "List",
+    "App"
+  ],
+  "author": "Asreen Ilyas",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "hbs": "^4.1.1",
+    "mongoose": "^5.10.17",
+    "nodemon": "^2.0.6"
+  }
+}
